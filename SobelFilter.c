@@ -6,6 +6,7 @@
 unsigned char ** matrix_allocate(int rows,int cols);
 
 void deallocetemat(unsigned char**mat,int rows);
+void deallocetematS(short **mat,int rows);
 
 void normalization(unsigned char **mat,short **tempM,int pixel,int max,int min,int rows,int cols);
 
@@ -97,7 +98,7 @@ int main(int argc, char *argv[]) {
    	}
 	min=32767;max=-32767;	
 	fclose(fp1);
-	// y gradyantý için sobel 
+	// y gradyant? i?in sobel 
 		for(i=1;i<rows-1;i++){
 			for(j=1;j<cols-1;j++){
 				tempM[i][j]=(2*mat[i+1][j]+mat[i+1][j+1]+mat[i+1][j-1])-(2*mat[i-1][j]+mat[i-1][j+1]+mat[i-1][j-1]);
@@ -109,7 +110,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-	//y gradyantý içib normalizasyon
+	//y gradyant? i?ib normalizasyon
 	normalization(ygrad,tempM,pixel,max,min,rows,cols);
 	fp1=fopen("ygrad.pgm","wb");
 	
@@ -148,7 +149,7 @@ int main(int argc, char *argv[]) {
 	for(i=0;i<rows;i++){
         fwrite(sumgrad[i],1,cols,fp1);
    	}
-	close(fp1);
+	fclose(fp1);
 	
 	deallocetemat(sumgrad,rows);
 	deallocetemat(xgrad,rows);
@@ -170,14 +171,14 @@ unsigned char ** matrix_allocate(int rows,int cols){
 	unsigned char ** mat=(unsigned char **)malloc(sizeof(unsigned char * )*rows);
 	if(mat==NULL){
         printf("Malloc Error");
-        return;
+        exit(1);
     }
 	
 	for(i=0;i<rows;i++){
 		mat[i]=(unsigned char*)malloc(sizeof(unsigned char)*cols);
 		if(mat[i]==NULL){
         printf("Malloc Error");
-        return;
+        exit(1);
     }
 	}
 	return mat;
@@ -211,7 +212,6 @@ void deallocetematS(short **mat,int rows){
     }
     free(mat);
 }
-
 
 
 
